@@ -1,0 +1,39 @@
+# ==============================================================================
+# PIPELINE CONFIGURATION FILE
+# ==============================================================================
+
+# Input File Paths
+metadata_file: "data/example/example_metadata.csv"
+counts_matrix_file: "data/example/example_counts.csv"
+
+# Experimental Design Variables
+all_variables: 
+  - "fetal_sex"
+  - "trimester"
+interest_variable: "trimester"
+
+# Visual Aesthetics (Color Palettes)
+color_palette:
+  fetal_sex:
+    M: "#2A4B7C"
+    F: "#5B8266"
+  trimester:
+    First: "#D1A153"
+    Third: "#A37A74"
+
+# Differential Expression Formulas
+# You can add as many models as you want to test here
+formulas:
+  trimester: "~ 0 + trimester"
+  sex_trimester: "~ 0 + trimester + fetal_sex"
+
+# Statistical & Visualization Parameters
+interest_pcs: 
+  - "PC1"
+  - "PC2"
+distances: 
+  - "corr"
+  - "euclidean"
+clustering_methods: 
+  - "complete"
+  - "average"
