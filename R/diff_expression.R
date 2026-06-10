@@ -12,7 +12,7 @@ plot_body_heatmap <- function(heatmap_df){
     geom_tile()+
     scale_fill_gradient2(limits = c(-max_abs, max_abs), low = "brown4", mid = "white", high = "midnightblue")+
     scale_x_discrete(expand = c(0, 0)) + # CRITICAL: Remove blank padding on X axis
-    theme_classic(base_size = 6)+
+    theme_cowplot(font_size = 5)+
     theme(
       axis.text.x = element_blank(),
       axis.title = element_blank(),
@@ -20,15 +20,16 @@ plot_body_heatmap <- function(heatmap_df){
       axis.ticks = element_line(linewidth = 0.05),
       axis.ticks.x = element_blank(), # Cleaner look without bottom ticks if sample names are hidden
       plot.margin = margin(t = 0, r = 5, b = 5, l = 5, unit = "pt"),
-      axis.line = element_line(linewidth = 0.2)
+      axis.line = element_blank()
     )+
+    scale_y_discrete(position = "right")
     labs(fill = "Z-Score")
   return(p)
 }
 
 plot_header_heatmap <- function(heatmap_df, main_var, color_palette = NULL){
   main_var_name <- set_names(main_var)
-  heatmap_df <- heatmap_df %>% select(id, variable) %>% unique()
+  heatmap_df <- heatmap_df %>% dplyr::select(id, variable) %>% unique()
   
   p <- ggplot(heatmap_df, aes(x = id, y = 1, fill = variable))+
     geom_tile(color = "white", linewidth = 0.1)+
@@ -69,17 +70,8 @@ plot_heatmap <- function(deg_table, design_metadata, v, main_var, color_palette 
   body <- plot_body_heatmap(heatmap_df)
   header <- plot_header_heatmap(heatmap_df, main_var, color_palette)
   
-  leg_header <- as_ggplot(get_legend(header))
-  leg_body   <- as_ggplot(get_legend(body))
-  legends    <- plot_grid(leg_header, leg_body, ncol = 1, rel_heights = c(1, 1), align = "v")
-  
-  header <- header + theme(legend.position = "none")
-  body <- body + theme(legend.position = "none")
-  
-  heat <- plot_grid(header, body, align = "v", ncol = 1, rel_heights = c(0.1, 2))
-  
-  f_heat <- plot_grid(heat, legends, nrow = 1, rel_widths = c(1, 0.25))
-  return(f_heat)
+  plot <- insert_top(body, header, height = 0.03)
+  return(plot)
 }
 
 plot_volcano <- function(de_table, contrast_name){
@@ -165,8 +157,11 @@ diff_expression <- function(formula, formula_name, design_metadata, dge, color_p
       output_file <- paste0("results/differential_expression/DEG_", file_prefix, ".csv")
       write_csv(deg_table, output_file)
       p <- plot_heatmap(deg_table, design_metadata, v, main_var, color_palette[[main_var]])
-      ggsave(filename = paste0("results/differential_expression/DEG_", file_prefix, "_heatmap.png"), plot = p,
-             height = 7, width = 10, units = "cm", bg = "white")
+      while (!is.null(dev.list())){dev.off()}
+      png(paste0("results/differential_expression/DEG_", file_prefix, "_heatmap.png"), 
+             height = 7, width = 10, units = "cm", bg = "white", res = 300)
+      print(p)
+      dev.off()
       p <- plot_volcano(de_table, contrast_name)
       ggsave(filename = paste0("results/differential_expression/DEG_", file_prefix, "_volcano.png"), plot = p,
              height = 7, width = 10, units = "cm", bg = "white")

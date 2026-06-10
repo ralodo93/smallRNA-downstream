@@ -4,6 +4,7 @@ library(tidyverse)
 library(cowplot)
 library(ggpubr)
 library(yaml)
+library(aplot)
 
 config <- read_yaml("config.yml")
 
