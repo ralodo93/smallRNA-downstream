@@ -143,11 +143,11 @@ get_top_table <- function(fit, coef) {
     rownames_to_column("miRNA") %>%
     as_tibble() %>%
     mutate(
-      Significance = case_when(
+      Significance = factor(case_when(
         adj.P.Val < 0.05 & logFC > 1  ~ "Up",
         adj.P.Val < 0.05 & logFC < -1 ~ "Down",
         TRUE                           ~ "Not Significant"
-      )
+      ), levels = c("Up", "Down", "Not Significant"))
     )
   return(de_table)
 }
