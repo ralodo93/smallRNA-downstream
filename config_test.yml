@@ -1,0 +1,7 @@
+# ==============================================================================
+# PIPELINE CONFIGURATION FILE
+# ==============================================================================
+
+# Input File Paths
+metadata_file: "data/example/metadata.txt"
+counts_matrix_file: "data/example/counts.txt"

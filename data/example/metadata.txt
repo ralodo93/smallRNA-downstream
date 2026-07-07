@@ -1,0 +1,13 @@
+id	condition	genotype
+abi1_aba_1	ABA	abi1
+abi1_aba_2	ABA	abi1
+abi1_aba_3	ABA	abi1
+abi1_control_1	Control	abi1
+abi1_control_2	Control	abi1
+abi1_control_3	Control	abi1
+wt_aba_1	ABA	wt
+wt_aba_2	ABA	wt
+wt_aba_3	ABA	wt
+wt_control_1	Control	wt
+wt_control_2	Control	wt
+wt_control_3	Control	wt

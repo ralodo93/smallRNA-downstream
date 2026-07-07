@@ -3,37 +3,26 @@
 # ==============================================================================
 
 # Input File Paths
-metadata_file: "data/example/example_metadata.csv"
-counts_matrix_file: "data/example/example_counts.csv"
-
-# Experimental Design Variables
-all_variables: 
-  - "fetal_sex"
-  - "trimester"
-interest_variable: "trimester"
-
-# Visual Aesthetics (Color Palettes)
-color_palette:
-  fetal_sex:
-    M: "#2A4B7C"
-    F: "#5B8266"
-  trimester:
-    First: "#D1A153"
-    Third: "#A37A74"
-
-# Differential Expression Formulas
-# You can add as many models as you want to test here
+metadata_file: "data/example/metadata.txt"
+counts_matrix_file: "data/example/counts.txt"
+qc_variables:
+- "genotype"
+- "condition"
+color_variables:
+  condition:
+    ABA: "#91F2E2"
+    Control: "#A8B2C1"
+  genotype:
+    abi1: "#D05A3F"
+    wt: "#4A7C59"
+group_variable: "condition"
 formulas:
-  trimester: "~ 0 + trimester"
-  sex_trimester: "~ 0 + trimester + fetal_sex"
-
-# Statistical & Visualization Parameters
-interest_pcs: 
-  - "PC1"
-  - "PC2"
-distances: 
-  - "corr"
-  - "euclidean"
-clustering_methods: 
-  - "complete"
-  - "average"
+  "~ genotype":
+    - "wt - abi1"
+  "~ condition":
+    - "Control - ABA"
+  "~ condition + genotype":
+    - "Control - ABA"
+  "~ condition * genotype":
+    - "Control_wt - Control_abi1"
+    - "( Control_wt - Control_abi1 ) - ( ABA_wt - ABA_abi1 )"
