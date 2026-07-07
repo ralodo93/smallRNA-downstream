@@ -262,3 +262,8 @@ for (formula in names(config$formulas)){
   plot_volcano[[formula]] <- results_formula$volcano_plots
   plot_heatmap[[formula]] <- results_formula$heatmap_plots
 }
+
+# example formula ~ condition
+cowplot::plot_grid(plotlist = plot_volcano[["~ condition"]])
+cowplot::plot_grid(plotlist = plot_heatmap[["~ condition"]])
+print(results[["~ condition"]])
